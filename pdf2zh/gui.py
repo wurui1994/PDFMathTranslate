@@ -11,9 +11,17 @@ import requests
 import tqdm
 from gradio_pdf import PDF
 
+g_model = None
+
+def get_model():
+    return g_model
+
+def set_model(m):
+    global g_model
+    g_model = m
+
 from pdf2zh import __version__
 from pdf2zh.high_level import translate
-from pdf2zh.pdf2zh import model
 from pdf2zh.translator import (
     AnythingLLMTranslator,
     AzureOpenAITranslator,
@@ -23,7 +31,7 @@ from pdf2zh.translator import (
     DeepLTranslator,
     DeepLXTranslator,
     DifyTranslator,
-    ArgosTranslator,
+    # ArgosTranslator,
     GeminiTranslator,
     GoogleTranslator,
     ModelScopeTranslator,
@@ -56,7 +64,7 @@ service_map: dict[str, BaseTranslator] = {
     "Tencent": TencentTranslator,
     "Dify": DifyTranslator,
     "AnythingLLM": AnythingLLMTranslator,
-    "Argos Translate": ArgosTranslator,
+    # "Argos Translate": ArgosTranslator,
     "Gork": GorkTranslator,
     "DeepSeek": DeepseekTranslator,
     "OpenAI-liked": OpenAIlikedTranslator,
@@ -262,6 +270,8 @@ def translate_file(
     except ValueError:
         threads = 1
 
+    m = get_model()
+    print("model global", m)
     param = {
         "files": [str(file_raw)],
         "pages": selected_page,
@@ -274,10 +284,24 @@ def translate_file(
         "cancellation_event": cancellation_event_map[session_id],
         "envs": _envs,
         "prompt": prompt,
-        "model": model,
+        "model": m,
     }
     try:
-        translate(**param)
+        translate(files=[str(file_raw)],
+        output=output,
+        pages=selected_page,
+        lang_in=lang_from,
+        lang_out=lang_to,
+        service=f"{translator.name}",
+        thread=int(threads),
+        # vfont,
+        # vchar,
+        callback=progress_bar,
+        # compatible,
+        cancellation_event=cancellation_event_map[session_id],
+        model=m,
+        envs=_envs,
+        prompt=prompt)
     except CancelledError:
         del cancellation_event_map[session_id]
         raise gr.Error("Translation cancelled")
@@ -395,7 +419,7 @@ with gr.Blocks(
             service = gr.Dropdown(
                 label="Service",
                 choices=service_map.keys(),
-                value="Google",
+                value="Bing",
             )
             envs = []
             for i in range(3):
@@ -419,7 +443,7 @@ with gr.Blocks(
             page_range = gr.Radio(
                 choices=page_map.keys(),
                 label="Pages",
-                value=list(page_map.keys())[0],
+                value=list(page_map.keys())[1],
             )
 
             page_input = gr.Textbox(

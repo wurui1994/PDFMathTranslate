@@ -16,8 +16,8 @@ from tencentcloud.common import credential
 from tencentcloud.tmt.v20180321.tmt_client import TmtClient
 from tencentcloud.tmt.v20180321.models import TextTranslateRequest
 from tencentcloud.tmt.v20180321.models import TextTranslateResponse
-import argostranslate.package
-import argostranslate.translate
+# import argostranslate.package
+# import argostranslate.translate
 
 import json
 
@@ -662,7 +662,7 @@ class DifyTranslator(BaseTranslator):
         # 解析响应
         return response_data.get("data", {}).get("outputs", {}).get("text", [])
 
-
+'''
 class ArgosTranslator(BaseTranslator):
     name = "argos"
 
@@ -701,7 +701,7 @@ class ArgosTranslator(BaseTranslator):
         translation = from_lang.get_translation(to_lang)
         translatedText = translation.translate(text)
         return translatedText
-
+'''
 
 class GorkTranslator(OpenAITranslator):
     # https://docs.x.ai/docs/overview#getting-started

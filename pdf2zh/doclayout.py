@@ -72,7 +72,7 @@ class OnnxModel(DocLayoutModel):
 
     @staticmethod
     def from_pretrained(repo_id: str, filename: str):
-        if os.environ.get("USE_MODELSCOPE", "0") == "1":
+        if True: #os.environ.get("USE_MODELSCOPE", "0") == "1":
             repo_mapping = {
                 # Edit here to add more models
                 "wybxc/DocLayout-YOLO-DocStructBench-onnx": "AI-ModelScope/DocLayout-YOLO-DocStructBench-onnx"

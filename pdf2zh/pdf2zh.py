@@ -199,7 +199,7 @@ def find_all_files_in_directory(directory_path):
     return file_paths
 
 
-model = None
+# model = None
 
 
 def main(args: Optional[List[str]] = None) -> int:
@@ -209,14 +209,19 @@ def main(args: Optional[List[str]] = None) -> int:
 
     if parsed_args.debug:
         log.setLevel(logging.DEBUG)
-    global model
+    # global model
     if parsed_args.onnx:
         model = OnnxModel(parsed_args.onnx)
     else:
         model = OnnxModel.load_available()
 
+
     if parsed_args.interactive:
+        from pdf2zh.gui import get_model, set_model
         from pdf2zh.gui import setup_gui
+        print("model", model)
+        set_model(model)
+        print("get model", get_model())
 
         if parsed_args.serverport:
             setup_gui(

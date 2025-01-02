@@ -238,7 +238,23 @@ def translate_stream(
 
     fp = io.BytesIO()
     doc_zh.save(fp)
-    obj_patch: dict = translate_patch(fp, **locals())
+    # print(locals())
+    obj_patch: dict = translate_patch(fp,
+    pages,
+    vfont,
+    vchar,
+    thread,
+    doc_zh,
+    lang_in,
+    lang_out,
+    service,
+    resfont,
+    noto,
+    callback,
+    cancellation_event,
+    model,
+    envs,
+    prompt)
 
     for obj_id, ops_new in obj_patch.items():
         # ops_old=doc_en.xref_stream(obj_id)
@@ -373,7 +389,18 @@ def translate(
             os.unlink(file)
         s_mono, s_dual = translate_stream(
             s_raw,
-            **locals(),
+            pages,
+            lang_in,
+            lang_out,
+            service,
+            thread,
+            vfont,
+            vchar,
+            callback,
+            cancellation_event,
+            model,
+            envs,
+            prompt
         )
         file_mono = Path(output) / f"{filename}-mono.pdf"
         file_dual = Path(output) / f"{filename}-dual.pdf"

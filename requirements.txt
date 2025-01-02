@@ -1,0 +1,22 @@
+requests
+pymupdf
+tqdm
+tenacity
+numpy
+ollama
+xinference-client
+deepl
+openai
+azure-ai-translation-text
+gradio
+huggingface_hub
+onnx
+onnxruntime
+modelscope
+opencv-python-headless
+tencentcloud-sdk-python
+pdfminer.six
+gradio_pdf
+pikepdf
+peewee
+# argostranslate
